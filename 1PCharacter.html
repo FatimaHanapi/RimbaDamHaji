@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pilih Karakter Anda</title>
+	<link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background-image: url('forest.jpg');
+            background-size: cover;
+            z-index: -1;
+            animation: moveBackground 20s infinite alternate ease-in-out;
+        }
+        @keyframes moveBackground {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-25%); }
+        }
+        #menu {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        #menu h1 {
+            color: #2e7d32;
+            font-weight: 700;
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .button-sound {
+            background-color: #fdd835;
+        }
+        .button-sound:hover {
+            background-color: #fbc02d;
+        }
+        .button-rules {
+            background-color: #1e88e5;
+        }
+        .button-rules:hover {
+            background-color: #1976d2;
+        }
+        .button-about {
+            background-color: #8e24aa;
+        }
+        .button-about:hover {
+            background-color: #7b1fa2;
+        }
+        .button-single, .button-multi {
+            background-color: #a0b114;
+            width: calc(100% - 20px);
+        }
+        .button-single:hover, .button-multi:hover {
+            background-color: #663300;
+        }
+        .button:focus {
+            outline: none;
+        }
+        #info {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            z-index: 2;
+        }
+        #game-logo {
+            border: 5px solid #2e7d32;
+            padding: 20px;
+            margin-bottom: 1px;
+            background-color: #e8f5e9;
+            font-size: 80px;
+            font-weight: bold;
+            color: #2e7d32;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #game-logo span {
+            display: block;
+        }
+        #menu-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .menu-line {
+            width: 100%;
+            height: 4px;
+            background-color: black;
+        }
+
+        @media (max-width: 768px) {
+            #menu {
+                padding: 10px;
+            }
+            #menu h1 {
+                font-size: 48px;
+            }
+            .button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            #game-logo {
+                font-size: 48px;
+            }
+            #game-logo span {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="board"></div>
+    <div id="character-selection">
+        <h1>Pilih satu karakter kegemaran anda</h1>
+        <div class="character-grid">
+            <div class="character" data-character="img/img1.png">
+                <img src="img/img1.png" alt="Character 1">
+            </div>
+            <div class="character" data-character="img/img2.png">
+                <img src="img/img2.png" alt="Character 2">
+            </div>
+            <div class="character" data-character="img/img3.png">
+                <img src="img/img3.png" alt="Character 3">
+            </div>
+            <div class="character" data-character="img/img4.png">
+                <img src="img/img4.png" alt="Character 4">
+            </div>
+            <div class="character" data-character="img/img5.png">
+                <img src="img/img5.png" alt="Character 5">
+            </div>
+            <div class="character" data-character="img/img6.png">
+                <img src="img/img6.png" alt="Character 6">
+            </div>
+        </div>
+        <button id="start-button" disabled>MULA</button>
+    </div>
+    
+    <!-- Back button to index.html -->
+    <a href="index.html" class="back-link">&#8592;</a>
+
+    <script>
+        function createBoard() {
+            const board = document.getElementById('board');
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    if ((row + col) % 2 === 0) {
+                        cell.classList.add('white');
+                    } else {
+                        cell.classList.add('green');
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        createBoard();
+
+        document.querySelectorAll('.character').forEach(character => {
+            character.addEventListener('click', function() {
+                document.querySelectorAll('.character').forEach(char => {
+                    char.style.backgroundColor = '';
+                });
+                this.style.backgroundColor = '#8BC34A';
+                document.getElementById('start-button').disabled = false;
+                localStorage.setItem('selectedCharacter', this.dataset.character);
+            });
+        });
+
+        document.getElementById('start-button').addEventListener('click', function() {
+            window.location.href = '1PlayerGame.html';
+        });
+    </script>
+</body>
+</html>

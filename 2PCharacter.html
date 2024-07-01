@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pilih Karakter</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background-image: url('forest.jpg');
+            background-size: cover;
+            z-index: -1;
+            animation: moveBackground 20s infinite alternate ease-in-out;
+        }
+        @keyframes moveBackground {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-25%); }
+        }
+        #menu {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        #menu h1 {
+            color: #2e7d32;
+            font-size: 40px; 
+            margin-bottom: 20px;
+        }
+        #character-selection {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 80%;
+            z-index: 1;
+        }
+        .character-box {
+            border: 2px solid #333;
+            padding: 20px;
+            background-color: #fff;
+            text-align: center;
+            width: 45%;
+            transition: transform 0.3s ease-in-out; /* Added transition */
+        }
+        .character-box:hover {
+            transform: scale(1.05); /* Scale up on hover */
+        }
+        .character-box h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .character-box p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .characters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            margin-bottom: 20px;
+        }
+        .character {
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px;
+            transition: transform 0.3s ease-in-out; /* Added transition */
+        }
+        .character img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .character:hover {
+            transform: scale(1.05); /* Scale up on hover */
+        }
+        .character.selected {
+            background-color: #8BC34A;
+        }
+        .start-button {
+            font-size: 24px;
+            padding: 10px 20px;
+            background-color: #8BC34A;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out; /* Added transition */
+        }
+        .start-button:hover {
+            background-color: #7CB342;
+            transform: scale(1.05); /* Scale up on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div id="character-selection">
+        <div class="character-box" id="player1-box">
+            <h2>Pemain 1</h2>
+            <p>Pilih karakter anda</p>
+            <div class="characters" id="player1-characters">
+                <div class="character" data-character="img/1st/1.png"><img src="img/1st/1.png" alt="Character 1"></div>
+                <div class="character" data-character="img/1st/2.png"><img src="img/1st/2.png" alt="Character 2"></div>
+                <div class="character" data-character="img/1st/3.png"><img src="img/1st/3.png" alt="Character 3"></div>
+                <div class="character" data-character="img/1st/4.png"><img src="img/1st/4.png" alt="Character 4"></div>
+                <div class="character" data-character="img/1st/5.png"><img src="img/1st/5.png" alt="Character 5"></div>
+                <div class="character" data-character="img/1st/6.png"><img src="img/1st/6.png" alt="Character 6"></div>
+            </div>
+        </div>
+        <div class="character-box" id="player2-box">
+            <h2>Pemain 2</h2>
+            <p>Pilih karakter anda</p>
+            <div class="characters" id="player2-characters">
+                <div class="character" data-character="img/2nd/1.png"><img src="img/2nd/1.png" alt="Character 1"></div>
+                <div class="character" data-character="img/2nd/2.png"><img src="img/2nd/2.png" alt="Character 2"></div>
+                <div class="character" data-character="img/2nd/3.png"><img src="img/2nd/3.png" alt="Character 3"></div>
+                <div class="character" data-character="img/2nd/4.png"><img src="img/2nd/4.png" alt="Character 4"></div>
+                <div class="character" data-character="img/2nd/5.png"><img src="img/2nd/5.png" alt="Character 5"></div>
+                <div class="character" data-character="img/2nd/6.png"><img src="img/2nd/6.png" alt="Character 6"></div>
+            </div>
+        </div>
+    </div>
+    <button class="start-button" id="start-button">MULA</button>
+
+    <script>
+        // Get player names from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const player1Name = urlParams.get('player1');
+        const player2Name = urlParams.get('player2');
+
+        // Set player names in the character selection boxes
+        document.getElementById('player1-box').querySelector('h2').textContent = player1Name;
+        document.getElementById('player2-box').querySelector('h2').textContent = player2Name;
+
+        let player1Selection = null;
+        let player2Selection = null;
+
+        document.getElementById('player1-characters').addEventListener('click', function(event) {
+            if (event.target.closest('.character')) {
+                const characters = document.querySelectorAll('#player1-characters .character');
+                characters.forEach(character => character.classList.remove('selected'));
+                event.target.closest('.character').classList.add('selected');
+                player1Selection = event.target.closest('.character').dataset.character;
+            }
+        });
+
+        document.getElementById('player2-characters').addEventListener('click', function(event) {
+            if (event.target.closest('.character')) {
+                const characters = document.querySelectorAll('#player2-characters .character');
+                characters.forEach(character => character.classList.remove('selected'));
+                event.target.closest('.character').classList.add('selected');
+                player2Selection = event.target.closest('.character').dataset.character;
+            }
+        });
+
+        document.getElementById('start-button').addEventListener('click', function() {
+            if (player1Selection && player2Selection) {
+                window.location.href = `2PlayerGame.html?player1=${player1Name}&player1Character=${player1Selection}&player2=${player2Name}&player2Character=${player2Selection}`;
+            } else {
+                alert('Sila pilih karakter untuk kedua-dua pemain.');
+            }
+        });
+
+        function createBoard() {
+            const board = document.getElementById('board');
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    if ((row + col) % 2 === 0) {
+                        cell.classList.add('white');
+                    } else {
+                        cell.classList.add('green');
+                    }
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
