@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dam Haji Rimba</title>
+    <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%;
+            height: 100%;
+            background-image: url('forest.jpg');
+            background-size: cover;
+            z-index: -1;
+            animation: moveBackground 20s infinite alternate ease-in-out;
+        }
+        @keyframes moveBackground {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-25%); }
+        }
+        #menu {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        #menu h1 {
+            color: #2e7d32;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            transform: scale(1.05);
+        }
+        .button-sound {
+            background-color: #fdd835;
+        }
+        .button-sound:hover {
+            background-color: #fbc02d;
+        }
+        .button-rules {
+            background-color: #1e88e5;
+        }
+        .button-rules:hover {
+            background-color: #1976d2;
+        }
+        .button-about {
+            background-color: #8e24aa;
+        }
+        .button-about:hover {
+            background-color: #7b1fa2;
+        }
+        .button-single, .button-multi {
+            background-color: #a0b114;
+            width: calc(100% - 20px);
+        }
+        .button-single:hover, .button-multi:hover {
+            background-color: #663300;
+        }
+        .button:focus {
+            outline: none;
+        }
+        #info {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            z-index: 2;
+        }
+        #game-logo {
+            border: 5px solid #2e7d32;
+            padding: 20px;
+            margin-bottom: 1px;
+            background-color: #e8f5e9;
+            font-size: 80px;
+            font-weight: bold;
+            color: #2e7d32;
+            letter-spacing: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #game-logo span {
+            display: block;
+        }
+        #menu-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            cursor: pointer;
+            z-index: 3;
+        }
+        .menu-line {
+            width: 100%;
+            height: 4px;
+            background-color: black;
+        }
+
+        @media (max-width: 768px) {
+            #menu {
+                padding: 10px;
+            }
+            #menu h1 {
+                font-size: 48px;
+            }
+            .button {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            #game-logo {
+                font-size: 48px;
+            }
+            #game-logo span {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="background"></div>
+    <div id="menu-button" onclick="toggleMenu()">
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+        <div class="menu-line"></div>
+    </div>
+    <div id="info">
+        <button class="button button-sound" onclick="toggleSound()">Suara buka</button>
+        <button class="button button-rules" onclick="goToPage('rule.html')">Peraturan</button>
+        <button class="button button-about" onclick="goToPage('about.html')">Tentang</button>
+    </div>
+    <div id="menu">
+        <div id="game-logo">
+            <span>Dam Haji</span>
+            <span>Rimba</span>
+        </div>
+        <button class="button button-single" onclick="goToPage('1playerName.html')">Satu pemain</button>
+        <button class="button button-multi" onclick="goToPage('2playerName.html')">Dua pemain</button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="background-audio" loop>
+        <source src="assets/Tribal Village.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        var audio = document.getElementById('background-audio');
+        var soundButton = document.querySelector('.button-sound');
+
+        function toggleSound() {
+            if (audio.paused) {
+                audio.play();
+                soundButton.textContent = 'Suara tutup';
+            } else {
+                audio.pause();
+                soundButton.textContent = 'Suara buka';
+            }
+        }
+
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        function toggleMenu() {
+            const info = document.getElementById('info');
+            if (info.style.display === 'flex') {
+                info.style.display = 'none';
+            } else {
+                info.style.display = 'flex';
+            }
+        }
+
+        // Play audio on the first user interaction to comply with autoplay policies
+        document.addEventListener('DOMContentLoaded', function() {
+            var audioPlaying = localStorage.getItem('audioPlaying');
+
+            if (audioPlaying === 'true') {
+                audio.play().catch(function(error) {
+                    console.log('Error playing audio:', error);
+                });
+            }
+
+            function startAudio() {
+                audio.play().then(() => {
+                    localStorage.setItem('audioPlaying', 'true');
+                    soundButton.textContent = 'Suara tutup';
+                }).catch((error) => {
+                    console.log('Error playing audio:', error);
+                });
+                document.removeEventListener('click', startAudio);
+            }
+
+            if (audio.paused) {
+                document.addEventListener('click', startAudio);
+            }
+        });
+    </script>
+</body>
+</html>
